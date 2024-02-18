@@ -1,13 +1,25 @@
+const express = require('express');
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+
+const PORT = process.env.PORT || 3001;
+const app = express();
+
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+
 
 const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: "",
-        database: 'employee_db'
-    });
+        password: '',
+        database: 'employee_tracker_db',
+    },
+        console.log('Connected to the employee_db database.')
+    );
 
     startTracker();
 
@@ -28,6 +40,7 @@ const db = mysql.createConnection(
                         'Update employee role',
                         'Exit'
                     ],
+
                 })
                 .then(function (answer) {
                     switch (answer.action) {
@@ -59,6 +72,9 @@ const db = mysql.createConnection(
                 });
         }
     
+
+        
+
         // function to view all employees
         function viewEmployees() {
             db.query('SELECT * FROM employee', function (err, results) {
@@ -82,3 +98,8 @@ const db = mysql.createConnection(
                 startTracker();
             });
         }
+
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        }); 
