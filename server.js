@@ -9,8 +9,6 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-
-
 const db = mysql.createConnection(
     {
         host: 'localhost',
@@ -18,10 +16,31 @@ const db = mysql.createConnection(
         password: '',
         database: 'employee_tracker_db',
     },
-        console.log('Connected to the employee_db database.')
+        
     );
 
+
+
+db.connect(function (err) {
+    if (err) throw err;
+    // this is the ascii art splash title
+    console.log(`    ███████╗███╗   ███╗██████╗ ██╗      ██████╗ ██╗   ██╗███████╗███████╗
+    ██╔════╝████╗ ████║██╔══██╗██║     ██╔═══██╗╚██╗ ██╔╝██╔════╝██╔════╝
+    █████╗  ██╔████╔██║██████╔╝██║     ██║   ██║ ╚████╔╝ █████╗  █████╗  
+    ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██║   ██║  ╚██╔╝  ██╔══╝  ██╔══╝  
+    ███████╗██║ ╚═╝ ██║██║     ███████╗╚██████╔╝   ██║   ███████╗███████╗
+    ╚═══████████╗██████╗═╝█████╗══██████╗██╗══██╗███████╗██████╗╝╚══════╝
+        ╚══██╔══╝██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝██╔══██╗        
+           ██║   ██████╔╝███████║██║     █████╔╝ █████╗  ██████╔╝        
+           ██║   ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██╔══██╗        
+           ██║   ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║        
+           ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝`)
+    // run the startTracker function after the connection is successful to show prompts to user
     startTracker();
+  });
+
+
+
 
         // function to start the prompts
         function startTracker() {
@@ -64,9 +83,9 @@ const db = mysql.createConnection(
                             break;
                         case 'Update employee role':
                             updateEmployeeRole();
-                            break;
+                            break;       
                         case 'Exit':
-                            connection.end();
+                            db.end();
                             break;
                     }
                 });
@@ -99,7 +118,11 @@ const db = mysql.createConnection(
             });
         }
 
+        // add employee
+        
+
 
         app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
+            ;
         }); 
+    
