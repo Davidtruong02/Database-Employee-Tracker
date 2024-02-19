@@ -118,8 +118,51 @@ db.connect(function (err) {
             });
         }
 
-        // add employee
+        // function to add an employee
+        function addEmployee() {
+            inquirer
+            .prompt([
+                {
+                    name: 'first_name',
+                    type: 'input',
+                    message: 'Enter the employee\'s first name:',
+                },
+                {
+                    name: 'last_name',
+                    type: 'input',
+                    message: 'Enter the employee\'s last name:',
+                },
+                {
+                    name: 'role_id',
+                    type: 'input',
+                    message: 'Enter the employee\'s role ID:',
+                },
+                {
+                    name: 'manager_id',
+                    type: 'input',
+                    message: 'Enter the employee\'s manager ID:',
+                },
+            ])
+                .then(function (answer) {
+                db.query('INSERT INTO employee SET ?',
+                {
+                    first_name: answer.first_name,
+                    last_name: answer.last_name,
+                    role_id: answer.role_id,
+                    manager_id: answer.manager_id,
+                },
+                function (err, results) {
+                    if (err) throw err;
+                    console.log('Employee added successfully!');
+                    startTracker();
+                });
+            });
+        }
+            
+
+
         
+
 
 
         app.listen(PORT, () => {
