@@ -86,6 +86,7 @@ db.connect(function (err) {
                             break;       
                         case 'Exit':
                             db.end();
+                            process.exit();
                             break;
                     }
                 });
@@ -149,7 +150,7 @@ db.connect(function (err) {
                     first_name: answer.first_name,
                     last_name: answer.last_name,
                     role_id: answer.role_id,
-                    manager_id: answer.manager_id,
+                    manager_id: answer.manager_id || null
                 },
                 function (err, results) {
                     if (err) throw err;
@@ -160,8 +161,90 @@ db.connect(function (err) {
         }
             
 
+        // function to add a department
+        function addDepartment() {
+            inquirer
+            .prompt([
+                {
+                    name: 'name',
+                    type: 'input',
+                    message: 'Enter the department name:',
+                },
+            ])
+                .then(function (answer) {
+                db.query('INSERT INTO department SET ?',
+                {
+                    name: answer.name,
+                },
+                function (err, results) {
+                    if (err) throw err;
+                    console.log('Department added successfully!');
+                    startTracker();
+                });
+            });
+        }
 
-        
+        // function to add a role
+        function addRole () {
+            inquirer
+            .prompt([
+                {
+                    name: 'title',
+                    type: 'input',
+                    message: 'Enter the role title:',
+                },
+                {
+                    name: 'salary',
+                    type: 'input',
+                    message: 'Enter the role salary:',
+                },
+                {
+                    name: 'department_id',
+                    type: 'input',
+                    message: 'Enter the role department ID:',
+                },
+            ])
+                .then(function (answer) {
+                db.query('INSERT INTO role SET ?',
+                {
+                    title: answer.title,
+                    salary: answer.salary,
+                    department_id: answer.department_id,
+                },
+                function (err, results) {
+                    if (err) throw err;
+                    console.log('Role added successfully!');
+                    startTracker();
+                });
+            });
+        }
+
+
+        // function to update an employee role
+        function updateEmployeeRole() {
+            inquirer
+            .prompt([
+                {
+                    name: 'employee_id',
+                    type: 'input',
+                    message: 'Enter the employee ID:',
+                },
+                {
+                    name: 'role_id',
+                    type: 'input',
+                    message: 'Enter the new role ID:',
+                },
+            ])
+                .then(function (answer) {
+                db.query('UPDATE employee SET role_id = ? WHERE id = ?',
+                [answer.role_id, answer.employee_id],
+                function (err, results) {
+                    if (err) throw err;
+                    console.log('Employee role updated successfully!');
+                    startTracker();
+                });
+            });
+        }
 
 
 
